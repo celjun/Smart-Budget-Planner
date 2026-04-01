@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Budget Planner</string>
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
+    <string name="current_balance">Current Balance</string>
+    <string name="recent_transactions">Recent Transactions</string>
+    <string name="add_entry">Add Entry</string>
+    <string name="name">Name</string>
+    <string name="amount">Amount</string>
+    <string name="date">Date</string>
+    <string name="category">Category</string>
+    <string name="food">Food</string>
+    <string name="transport">Transport</string>
+    <string name="shopping">Shopping</string>
+    <string name="etc">etc.</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="reconfirm_password">Reconfirm Password</string>
+    <string name="no_transactions">No transactions yet</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_amount">Enter amount</string>
+    <string name="enter_email">Enter email address</string>
+    <string name="enter_password">Enter password</string>
+    <string name="confirm_password">Re-enter password</string>
+    <string name="dont_have_account">Don\'t have an account? Register</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="select_date">Select Date</string>
+</resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ITEM LAYOUT: item_transaction.xml
+    Used by: TransactionAdapter (RecyclerView in HomeActivity)
+    Background color is set programmatically: green for income, red for expense.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/income_green">
+    <!--
+        cardBackgroundColor is overridden in TransactionAdapter.onBindViewHolder()
+        based on transaction.type: GREEN for income, RED for expense
+    -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="center_vertical">
+
+        <!-- Transaction name -->
+        <TextView
+            android:id="@+id/tvTransactionName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:text="Transaction Name" />
+
+        <!-- Transaction category chip -->
+        <TextView
+            android:id="@+id/tvTransactionCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp"
+            android:layout_marginEnd="12dp"
+            android:text="Food" />
+
+        <!-- Amount -->
+        <TextView
+            android:id="@+id/tvTransactionAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:text="+$0.00" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
