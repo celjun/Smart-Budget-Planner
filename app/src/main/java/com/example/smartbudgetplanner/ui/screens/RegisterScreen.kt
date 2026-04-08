@@ -13,24 +13,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun LoginScreen(
-    onLoginSuccess: (String, String) -> Unit,
-    onRegisterClick: () -> Unit,
+fun RegisterScreen(
+    onRegisterSuccess: (String, String, String) -> Unit,
+    onBackToLogin: () -> Unit,
     error: String? = null
 ) {
+    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212)) // Dark background
+            .background(Color(0xFF121212))
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Smart Budget Planner",
+            text = "Create Account",
             color = Color.White,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
@@ -44,6 +45,19 @@ fun LoginScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
         }
+
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Full Name") },
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color(0xFF1E1E1E),
+                unfocusedContainerColor = Color(0xFF1E1E1E),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White
+            )
+        )
 
         TextField(
             value = email,
@@ -73,19 +87,15 @@ fun LoginScreen(
         )
 
         Button(
-            onClick = { onLoginSuccess(email, password) },
+            onClick = { onRegisterSuccess(name, email, password) },
             modifier = Modifier.fillMaxWidth().height(50.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text("Login")
+            Text("Register")
         }
 
-        TextButton(onClick = onRegisterClick) {
-            Text("Register", color = Color.Gray)
-        }
-
-        TextButton(onClick = { /* Handle Forgot Password */ }) {
-            Text("Forgot Password?", color = Color.Gray)
+        TextButton(onClick = onBackToLogin) {
+            Text("Back to Login", color = Color.Gray)
         }
     }
 }
