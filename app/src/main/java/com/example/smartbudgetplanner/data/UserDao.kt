@@ -1,7 +1,9 @@
 package com.example.smartbudgetplanner.data
 
-import androidx.room.*
-import kotlinx.coroutines.flow.Flow
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface UserDao {
@@ -10,4 +12,7 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertUser(user: User)
+
+    @Query("UPDATE users SET password = :newPassword WHERE email = :email")
+    suspend fun updatePasswordByEmail(email: String, newPassword: String): Int
 }

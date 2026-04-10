@@ -16,6 +16,7 @@ import com.example.smartbudgetplanner.data.AppDatabase
 import com.example.smartbudgetplanner.ui.MainViewModel
 import com.example.smartbudgetplanner.ui.screens.AddEntryScreen
 import com.example.smartbudgetplanner.ui.screens.DashboardScreen
+import com.example.smartbudgetplanner.ui.screens.ForgotPasswordScreen
 import com.example.smartbudgetplanner.ui.screens.LoginScreen
 import com.example.smartbudgetplanner.ui.screens.RegisterScreen
 import com.example.smartbudgetplanner.ui.theme.SmartBudgetPlannerTheme
@@ -56,10 +57,15 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             onRegisterClick = {
-                                viewModel.clearAuthError()
+                                viewModel.clearAuthStatus()
                                 navController.navigate("register")
                             },
-                            error = uiState.authError
+                            onForgotPasswordClick = {
+                                viewModel.clearAuthStatus()
+                                navController.navigate("forgot_password")
+                            },
+                            error = uiState.authError,
+                            message = uiState.authMessage
                         )
                     }
                     composable("register") {
@@ -72,7 +78,21 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             onBackToLogin = {
-                                viewModel.clearAuthError()
+                                viewModel.clearAuthStatus()
+                                navController.popBackStack()
+                            },
+                            error = uiState.authError
+                        )
+                    }
+                    composable("forgot_password") {
+                        ForgotPasswordScreen(
+                            onResetPassword = { email, newPassword, confirmPassword ->
+                                viewModel.resetPassword(email, newPassword, confirmPassword) {
+                                    navController.popBackStack()
+                                }
+                            },
+                            onBackToLogin = {
+                                viewModel.clearAuthStatus()
                                 navController.popBackStack()
                             },
                             error = uiState.authError

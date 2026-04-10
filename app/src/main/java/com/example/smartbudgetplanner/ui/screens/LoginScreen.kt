@@ -16,7 +16,9 @@ import androidx.compose.ui.unit.sp
 fun LoginScreen(
     onLoginSuccess: (String, String) -> Unit,
     onRegisterClick: () -> Unit,
-    error: String? = null
+    onForgotPasswordClick: () -> Unit,
+    error: String? = null,
+    message: String? = null
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -41,6 +43,14 @@ fun LoginScreen(
             Text(
                 text = error,
                 color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
+
+        if (message != null) {
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
         }
@@ -84,7 +94,7 @@ fun LoginScreen(
             Text("Register", color = Color.Gray)
         }
 
-        TextButton(onClick = { /* Handle Forgot Password */ }) {
+        TextButton(onClick = onForgotPasswordClick) {
             Text("Forgot Password?", color = Color.Gray)
         }
     }

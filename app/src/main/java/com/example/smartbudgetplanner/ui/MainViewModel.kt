@@ -24,7 +24,8 @@ data class UiState(
     val savingsGoal: Double = 1000.0, // Savings goal (Story 8)
     val savingsGoalName: String = "PS5 & Travel",
     val currentUser: User? = null,
-    val authError: String? = null
+    val authError: String? = null,
+    val authMessage: String? = null
 )
 
 class MainViewModel(private val userDao: UserDao) : ViewModel() {
@@ -37,15 +38,15 @@ class MainViewModel(private val userDao: UserDao) : ViewModel() {
             try {
                 val existingUser = userDao.getUserByEmail(trimmedEmail)
                 if (existingUser != null) {
-                    _uiState.update { it.copy(authError = "User already exists") }
+                    _uiState.update { it.copy(authError = "User already exists", authMessage = null) }
                 } else {
                     val newUser = User(trimmedEmail, pass, name)
                     userDao.insertUser(newUser)
-                    _uiState.update { it.copy(currentUser = newUser, authError = null) }
+                    _uiState.update { it.copy(currentUser = newUser, authError = null, authMessage = null) }
                     onSuccess()
                 }
             } catch (e: Exception) {
-                _uiState.update { it.copy(authError = "Registration failed: ${e.message}") }
+                _uiState.update { it.copy(authError = "Registration failed: ${e.message}", authMessage = null) }
             }
         }
     }
@@ -55,16 +56,55 @@ class MainViewModel(private val userDao: UserDao) : ViewModel() {
         viewModelScope.launch {
             val user = userDao.getUserByEmail(trimmedEmail)
             if (user != null && user.password == pass) {
-                _uiState.update { it.copy(currentUser = user, authError = null) }
+                _uiState.update { it.copy(currentUser = user, authError = null, authMessage = null) }
                 onSuccess()
             } else {
-                _uiState.update { it.copy(authError = "Invalid email or password") }
+                _uiState.update { it.copy(authError = "Invalid email or password", authMessage = null) }
             }
         }
     }
 
-    fun clearAuthError() {
-        _uiState.update { it.copy(authError = null) }
+    fun resetPassword(email: String, newPassword: String, confirmPassword: String, onSuccess: () -> Unit) {
+        val trimmedEmail = email.trim().lowercase()
+        viewModelScope.launch {
+            when {
+                trimmedEmail.isBlank() || newPassword.isBlank() || confirmPassword.isBlank() -> {
+                    _uiState.update {
+                        it.copy(authError = "Please fill out all fields", authMessage = null)
+                    }
+                }
+                newPassword != confirmPassword -> {
+                    _uiState.update {
+                        it.copy(authError = "Passwords do not match", authMessage = null)
+                    }
+                }
+                newPassword.length < 6 -> {
+                    _uiState.update {
+                        it.copy(authError = "Password must be at least 6 characters", authMessage = null)
+                    }
+                }
+                else -> {
+                    val rowsUpdated = userDao.updatePasswordByEmail(trimmedEmail, newPassword)
+                    if (rowsUpdated > 0) {
+                        _uiState.update {
+                            it.copy(
+                                authError = null,
+                                authMessage = "Password reset successful. Please log in."
+                            )
+                        }
+                        onSuccess()
+                    } else {
+                        _uiState.update {
+                            it.copy(authError = "No account found for that email", authMessage = null)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun clearAuthStatus() {
+        _uiState.update { it.copy(authError = null, authMessage = null) }
     }
 
     fun addTransaction(name: String, amount: Double, date: LocalDate, category: Category, type: TransactionType) {
